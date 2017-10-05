@@ -6,7 +6,6 @@ function Matrix(rows,cols,){
 
 	function createMatrix(){
 		var matrix =[];
-
 		for(var i=0;i<rows;i++){
 			matrix[i]=[];
 			for(var j=0;j<cols;j++){
