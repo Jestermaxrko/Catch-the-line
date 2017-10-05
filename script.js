@@ -37,7 +37,6 @@ Matrix.createEmptyMatrix = function(rows,cols){
  return tmp_arr;
 }
 Matrix.plus = function(arrA,arrB){
-
 	if((arrA.rows == arrB.rows)&&(arrA.cols==arrB.cols)){
 		var result = new Matrix(arrA.rows,arrA.cols);
 		for(var i=0;i<result.rows;i++){
