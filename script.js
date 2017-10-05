@@ -177,7 +177,7 @@ function chooseBackColor(){
 
 function sizeUp(){
 	width+=speed;
-	if(width>dsiplay_width){
+	if(width>right_edge+30){
 		clearInterval(timerId);
 		if(is_green_braces){
 			game_over=true;
