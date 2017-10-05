@@ -6,6 +6,7 @@ function Matrix(rows,cols,){
 
 	function createMatrix(){
 		var matrix =[];
+
 		for(var i=0;i<rows;i++){
 			matrix[i]=[];
 			for(var j=0;j<cols;j++){
@@ -192,28 +193,41 @@ function sizeUp(){
 }
 
 function stop(){
-	if(game_over){
-	 	start();
-	}
-	else {
-		clearInterval(timerId);
-		if((width >= left_edge) && (width<=right_edge)){
-			score++;
-			score_div.innerHTML = "Score : "+score;
-			setTimeout(generateLevel,500);
-			
-		}else {
-			game_over=true;
-
-			score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
-			document.getElementById("catch").innerHTML ="Restart";
+	
+		if(game_over){
+		 	start();
 		}
-	}
+		else {
+
+			clearInterval(timerId);
+
+			if(is_green_braces){
+
+				if((width >= left_edge) && (width<=right_edge)){
+					score++;
+					score_div.innerHTML = "Score : "+score;
+					setTimeout(generateLevel,500);
+					
+				}else {
+					game_over=true;
+
+					score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
+					document.getElementById("catch").innerHTML ="Restart";
+				}
+			}else {
+				game_over=true;
+
+					score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
+					document.getElementById("catch").innerHTML ="Restart";
+			}
+		}
+	
 }
 
 function start(){
 	game_over=false;
 	score=0;
+	is_green_braces = true;
 	score_div.innerHTML = "Score : 0 ";
 	document.getElementById("start-page").style.display ="none";
 	var game = document.getElementById("game");
