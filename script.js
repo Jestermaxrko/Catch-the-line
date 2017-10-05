@@ -37,6 +37,7 @@ Matrix.createEmptyMatrix = function(rows,cols){
  return tmp_arr;
 }
 Matrix.plus = function(arrA,arrB){
+
 	if((arrA.rows == arrB.rows)&&(arrA.cols==arrB.cols)){
 		var result = new Matrix(arrA.rows,arrA.cols);
 		for(var i=0;i<result.rows;i++){
@@ -73,6 +74,9 @@ Matrix.mulOnMumber = function(arrA,number){
 }
 
 
+
+
+
 var GREEN ="green";
 
 var div = document.getElementById("line");
@@ -90,12 +94,27 @@ var speed=1;
 var color_quotes;
 var is_green_braces=true;
 var game_over = false;
+var user_name;
+var records= [];
 var dsiplay_width = window.innerWidth;
 console.log(dsiplay_width);
 dsiplay_width = 0.90*dsiplay_width;
 console.log(dsiplay_width);
+initFirebase();
+readRecordBoard();
 
 
+function initFirebase(){
+	var config = {
+    apiKey: "AIzaSyCzZSiuwc7QUhHNwM9UprqUDPTjTm7vVg4",
+    authDomain: "catch-the-line.firebaseapp.com",
+    databaseURL: "https://catch-the-line.firebaseio.com",
+    projectId: "catch-the-line",
+    storageBucket: "catch-the-line.appspot.com",
+    messagingSenderId: "872063387489"
+  };
+  firebase.initializeApp(config);
+}
 
 function generateLevel(){
 	width =0;
@@ -179,9 +198,7 @@ function sizeUp(){
 	if(width>right_edge+30){
 		clearInterval(timerId);
 		if(is_green_braces){
-			game_over=true;
-			score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
-			document.getElementById("catch").innerHTML ="Restart";
+			lost();
 		}else {
 			generateLevel();
 		}
@@ -208,20 +225,99 @@ function stop(){
 					setTimeout(generateLevel,500);
 					
 				}else {
-					game_over=true;
-
-					score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
-					document.getElementById("catch").innerHTML ="Restart";
+					lost();
 				}
 			}else {
-				game_over=true;
-
-					score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
-					document.getElementById("catch").innerHTML ="Restart";
+				lost();
 			}
 		}
 	
 }
+
+function lost(){
+	game_over=true;
+	score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score;
+	document.getElementById("catch").innerHTML ="Restart";
+	
+	if(user_name && score>0){
+		if(records.length >9){
+			if(score > records[9].score){
+				firebase.database().ref().push({
+			    username: user_name,
+			    score: score
+			  	});
+			}
+		}else {
+			firebase.database().ref().push({
+			    username: user_name,
+			    score: score
+			  	});
+			
+		}
+		score_div.innerHTML = "<span> You lost </span> <br>  Score : "+score+"<br> You are taking a " +
+			  	checkPlace()+ " place";
+		readRecordBoard();
+	}
+
+	
+}
+
+function checkPlace(){
+	var place;
+	for(var i=0;i<records.length;i++){
+		if(score>records[i].score){
+			place=i;break;
+		} 
+	}
+
+	return place+1;
+}
+
+function readRecordBoard(){
+
+	  firebase.database().ref().once('value').then(function(snapshot) {
+	  var username = snapshot.val();
+	  console.log(username);
+
+	  for(key in username)
+	  	records.push(username[key])
+	  records.sort(compare);
+	  records= records.filter(function(number,i) {
+  		if(i<10) return number;});
+
+	  createTable();
+	 
+	 ;})
+}
+
+function compare(a,b) {
+  if (a.score > b.score)
+    return -1;
+  if (a.score < b.score)
+    return 1;
+  return 0;
+}
+
+function createTable(){
+
+	var table = document.getElementById("record_table");
+
+	for(var i=records.length-1;i>=0;i--){
+		var row = table.insertRow(0);
+
+		for(var j=0;j<3;j++){
+			var cell = row.insertCell(j);
+			if(j==0)
+				cell.innerHTML=(i+1)+".";
+
+			if(j==1) cell.innerHTML = records[i].username;
+
+			if(j==2) cell.innerHTML = records[i].score;
+		}
+	}
+}
+
+
 
 function start(){
 	game_over=false;
@@ -229,6 +325,7 @@ function start(){
 	is_green_braces = true;
 	score_div.innerHTML = "Score : 0 ";
 	document.getElementById("start-page").style.display ="none";
+	user_name = document.getElementById("name").value;
 	var game = document.getElementById("game");
 	document.getElementById("catch").innerHTML ="Catch";
 	game.style.display ="block";

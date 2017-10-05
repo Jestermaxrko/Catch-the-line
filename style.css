@@ -22,15 +22,60 @@
 	margin-bottom: 20px; 
 }
 
+table{
+	font-family: "Trebuchet MS";
+	font-weight: bold;
+	color: #373c4f;
+	margin: 0 auto;
+	border: none;
+	background-color: white;
+	width: 20%;
+	padding: 10px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+table td:last-child{
+  text-align: right;
+
+}
+
+table td:first-child{
+  width: 10%;
+
+}
+
+table td + td{
+	text-align: left;
+}
+
+table td {
+ 	
+  }
+
+#name{
+	margin-bottom: 30px; 
+}
 
 h1{	
 	padding-top: 10px; 
-	font-family: Arial;
+	font-family: "Trebuchet MS";
 	color: rgba(0,0,0,.5);
 	margin-top-: 10px;
 	text-align: center;
 }
 
+h2{
+	font-weight: bold;
+	font-family: "Trebuchet MS";
+	margin: 0;
+	color: #373c4f;
+}
+
+
+input{
+	
+}
 
 a{	
 	text-decoration: none;
