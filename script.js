@@ -259,7 +259,6 @@ function lost(){
 		readRecordBoard();
 	}
 
-	
 }
 
 function checkPlace(){
@@ -326,6 +325,11 @@ function start(){
 	score_div.innerHTML = "Score : 0 ";
 	document.getElementById("start-page").style.display ="none";
 	user_name = document.getElementById("name").value;
+
+	if(user_name.length>15){
+		user_name = user_name.slice(0,15);
+	}
+
 	var game = document.getElementById("game");
 	document.getElementById("catch").innerHTML ="Catch";
 	game.style.display ="block";
